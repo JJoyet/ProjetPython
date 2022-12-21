@@ -71,7 +71,8 @@ class Player(object):
             pos.append(int(input("Where do you want to place your card (x value)?")))
             pos.append(int(input("(y value)?")))
         return pos
-
+    def your_turn_to_play(self, x)
+        
 
     @property
     def name(self):
@@ -88,17 +89,3 @@ class Player(object):
     @hand.setter
     def hand(self,hand):
         self.__hand=hand
-
-
-
-
-"""
-• à 3 joueurs : 1 Saboteur et 3 Chercheurs
-• à 4 joueurs : 1 Saboteur et 4 Chercheurs
-• à 5 joueurs : 2 Saboteurs et 4 Chercheurs
-• à 6 joueurs : 2 Saboteurs et 5 Chercheurs
-• à 7 joueurs : 3 Saboteurs et 5 Chercheurs
-• à 8 joueurs : 3 Saboteurs et 6 Chercheurs
-• à 9 joueurs : 3 Saboteurs et 7 Chercheurs
-• à 10 joueurs : toutes les cartes Rôle (4 Saboteurs et 7 Chercheurs)
-"""

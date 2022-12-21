@@ -5,7 +5,7 @@ import random
 
 
 
-class Menu(object):
+class menu(object):
 
     def __init__(self):  # Property
         self.__number = 0
