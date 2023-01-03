@@ -1,38 +1,40 @@
 import numpy as np
 import random
+from abc import ABC, abstractmethod
 import os
-from hand import Hand
+from .hand import Hand
+from .card import Carte
+from .board import Plateau
+import sys
 
 
 
-class Player(object):
+class Player(ABC):
     def __init__(self,name,role,nb_players):
         self.__name = name
         self.__role = role    #le role c'est de la classe menu.personnage[i]
-        self.__hand = Hand(nb_players) #pour afficher la main: player.hand.display_hand()
+        self.__hand = Hand(nb_players)   #pour afficher la main: player.hand.display_hand()
 
+    #Methode qui permet de faire piocher une carte au joueur
     def piocher_carte(self,pioche):
-        pioche[0].face=1
-        self.__hand.cards.append(pioche[0])
+        if len(pioche)<=0:
+            print("Erreur: la pioche est vide")
+            sys.exit()
+        
+        self.__hand.add_card(pioche[0])
         pioche.remove(pioche[0])
 
-    def choix_action(self,plateau):
-        #Le joueur choisi une action
-        print("What action do you want to take?")
-        print("1) Use a card")
-        print("2) Passing your turn and throw away a card")
-        choix_action=int(input())
+    #Methode qui permet d'enlever une carte au joueur
+    def defausse_carte(self,card,defausse):
+        defausse.append(card)
+        self.__hand.remove_card(card)
 
-        #On s'assure que le joueur choisi une action parmis les actions possibles
-        while choix_action !=1 and choix_action !=2:
-            print("Please, don't do anything else and just play!")
-            print("1) Use a card")
-            print("2) Passing your turn and throw away a card")
-            choix_action=int(input())
-        return choix_action
+    #Methode abstraite qui permet à un humain ou à une IA de jouer pendant un tour 
+    @abstractmethod
+    def tourjoueur(self,plateau,pioche,defausse): pass
 
-    def choix_carte_act(self,plateau):
 
+<<<<<<< HEAD
         #On demande au joueur quel carte il veut jouer
         no_carte=int(input("What card would you like to play (1 to {0})?".format(self.__hand.hand_size)))-1
 
@@ -73,6 +75,9 @@ class Player(object):
         return pos
     def your_turn_to_play(self, x)
         
+=======
+
+>>>>>>> origin/BrancheJulienLaurent3
 
     @property
     def name(self):
@@ -82,10 +87,39 @@ class Player(object):
     def role(self):
         return self.__role
 
+    @role.setter
+    def role(self,role):
+        if role == "S":
+            self.__role=role
+        #On defini par default "C" comme role
+        else:
+            self.__role="C"
+
+
     @property
     def hand(self):
         return self.__hand
 
+<<<<<<< HEAD
     @hand.setter
     def hand(self,hand):
         self.__hand=hand
+=======
+    # @hand.setter
+    # def hand(self,hand):
+    #     self.__hand=hand
+
+
+
+
+"""
+• à 3 joueurs : 1 Saboteur et 3 Chercheurs
+• à 4 joueurs : 1 Saboteur et 4 Chercheurs
+• à 5 joueurs : 2 Saboteurs et 4 Chercheurs
+• à 6 joueurs : 2 Saboteurs et 5 Chercheurs
+• à 7 joueurs : 3 Saboteurs et 5 Chercheurs
+• à 8 joueurs : 3 Saboteurs et 6 Chercheurs
+• à 9 joueurs : 3 Saboteurs et 7 Chercheurs
+• à 10 joueurs : toutes les cartes Rôle (4 Saboteurs et 7 Chercheurs)
+"""
+>>>>>>> origin/BrancheJulienLaurent3

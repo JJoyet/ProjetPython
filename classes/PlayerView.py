@@ -224,8 +224,8 @@ pygame.display.set_caption("Test")
 
 pv.menu("images/accueil0.jpg")
 pv.input_box(378,354)
-pv.entree_button("images/accueil0.jpg")
-pv.input_box(378,354)
+pv.entree_button("images/coal.jpg")
+
 pv.display_name()
 #pv.pick_card()
 #pv.discard_button()
