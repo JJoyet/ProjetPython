@@ -60,7 +60,7 @@ class PlayerView:
     def menu(self, img):
         screen.blit(pygame.image.load(img), (0, 0))
         pygame.display.flip()
-
+        
     def put_card(self, i, j):
         if (self.field[i][j] is None):
             return
@@ -197,6 +197,21 @@ class PlayerView:
                     else:
                         active = False
 
+    def entree_button(self,img):
+        done = False
+        while not done:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        screen.blit(pygame.image.load(img), (0, 0))
+                        pygame.display.flip()
+                        done = True
+ 
+
+        
+                
         
 
 pv = PlayerView()
@@ -207,10 +222,13 @@ screen = pygame.display.set_mode((960, 540))
 pygame.display.set_caption("Test")
 
 
-pv.menu("images/board_arena.jpg")
+pv.menu("images/accueil0.jpg")
+pv.input_box(378,354)
+pv.entree_button("images/accueil0.jpg")
+pv.input_box(378,354)
 pv.display_name()
-pv.pick_card()
-pv.discard_button()
+#pv.pick_card()
+#pv.discard_button()
 while True:
     continue
 """
