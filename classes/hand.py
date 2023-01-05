@@ -22,18 +22,18 @@ class Hand(object):#0       1       2       3       4       5       6       7   
 
     def __str__(self):
         """ Function ToString that displays the player's hand """
-        st=""
+        st = ""
         for x in range(0,3):
             for i in range(2*len(self.__cards)):
-                if x==1 and i%2==0:
-                    st+=f"{(i//2)+1}: "
-                elif i%2==0:
-                    st+="   "
-                elif i%2 != 0 and x==1:
-                    st+=self.__cards[(i-1)//2].part_st(x)+", "
-                elif i%2 != 0:
-                    st+=self.__cards[(i-1)//2].part_st(x)+"  "
-            st+="\n"
+                if x == 1 and i % 2 == 0:
+                    st += f"{(i//2)+1}: "
+                elif i % 2 == 0:
+                    st += "   "
+                elif i % 2 != 0 and x == 1:
+                    st += self.__cards[(i-1)//2].part_st(x)+", "
+                elif i % 2 != 0:
+                    st += self.__cards[(i-1)//2].part_st(x)+"  "
+            st += "\n"
         return st
 
     def affiche_tools(self):

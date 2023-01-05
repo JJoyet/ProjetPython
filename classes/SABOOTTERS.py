@@ -108,7 +108,6 @@ class SABOOTERS(object):
         """How a game is played"""
         # Initialization of the game
         self.__initpartie()
-
         # The game is played in three rounds
         for i in range(3):
             # We display on the board which round we are at
