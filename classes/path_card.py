@@ -1,7 +1,7 @@
 import numpy as np
 import random
 import os
-from .card import Carte
+from card import Carte
 import sys
 
 class Path_card(Carte):

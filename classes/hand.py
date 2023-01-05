@@ -1,7 +1,7 @@
 import numpy as np
 import random
 import sys
-from .card import Carte
+from card import Carte
 
 
 

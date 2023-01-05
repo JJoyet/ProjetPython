@@ -2,8 +2,8 @@ import numpy as np
 import random
 import os
 import sys
-from .card import Carte
-from .path_card import Path_card
+from card import Carte
+from path_card import Path_card
 
 class Plateau(object):
     """Plateau du jeu SABOOTERS"""

@@ -6,12 +6,7 @@ import os
 
 
 
-<<<<<<< HEAD
-class menu(object):
-
-=======
 class Menu(object):
->>>>>>> origin/BrancheJulienLaurent3
     def __init__(self):  # Property
         self.__number = 0
         self.__players_name = []
@@ -72,7 +67,7 @@ class Menu(object):
                     print("Please select 0 (AI) or 1 (Human):")
                     etat = False
 
-    def __cartes_roles(self):  # Saboteur or Digger
+    def __cartes_roles(self):  # Saboteur or Digger 
         personnage=[]
         if (self.__number == 3):
             personnage = ['S', 'C', 'C', 'C']

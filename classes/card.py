@@ -30,7 +30,7 @@ class Carte(ABC):
 
     def __init__(self,typ):
         #On defini une position par default 
-        self.pos = [0,0] #La position de la carte n'est pas un attribut privé car une carte peut se trouvé à priori n'importe où
+        self.pos = [0,0] #La position de la carte n'est pas un attribut privé car une carte peut se trouver à priori n'importe où
 
         #On defini le type de carte
         self.__typ=typ

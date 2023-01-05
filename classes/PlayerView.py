@@ -1,12 +1,21 @@
 import pygame
 
 class PlayerView:
-    def __init__(self):
+    def __init__(self, screen):
+        self.screen = screen
         self.i_factor = 75
         self.j_factor = 50
-        self.i_offset = 144
+        self.i_offset = 0
         self.j_offset = 0
-        self.field = [[None] * 11] * 9
+        self.field = [[None, None, None, None, None, None, None, None, None, None, None],
+                      [None, None, None, None, None, None, None, None, None, None, None],
+                      [None, None, None, None, None, None, None, None, None, None, None],
+                      [None, None, None, None, None, None, None, None, None, None, None],
+                      [None, None, None, None, None, None, None, None, None, None, None],
+                      [None, None, None, None, None, None, None, None, None, None, None],
+                      [None, None, None, None, None, None, None, None, None, None, None],
+                      [None, None, None, None, None, None, None, None, None, None, None],
+                      [None, None, None, None, None, None, None, None, None, None, None]]
 
     def input_box(self, x, y):
         # Create a nb_players input box that lets the user enter a string inside it.
@@ -32,6 +41,7 @@ class PlayerView:
                         active = False
                     # Change the current color of the input box.
                     color = color_active if active else color_inactive
+                
                 if event.type == pygame.KEYDOWN:
                     if active:
                         if event.key == pygame.K_RETURN:
@@ -42,50 +52,50 @@ class PlayerView:
                             text += event.unicode
 
             # Add a white backgournd to the text box
-            pygame.draw.rect(screen, (255, 255, 255), (input_box.x, input_box.y, input_box.w, input_box.h))
+            pygame.draw.rect(self.screen, (255, 255, 255), (input_box.x, input_box.y, input_box.w, input_box.h))
             # Render the current text.
             txt_surface = pygame.font.Font(None, 32).render(text, True, color)
             # Resize the box if the text is too long.
             width = max(200, txt_surface.get_width()+10)
             input_box.w = width
             # Blit the text.
-            screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
+            self.screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
             # Blit the input_box rect.
-            pygame.draw.rect(screen, color, input_box, 2)
+            pygame.draw.rect(self.screen, color, input_box, 2)
 
             pygame.display.flip()
 
         return None
 
     def menu(self, img):
-        screen.blit(pygame.image.load(img), (0, 0))
+        self.screen.blit(pygame.image.load(img), (0, 0))
         pygame.display.flip()
         
-    def put_card(self, i, j):
-        if (self.field[i][j] is None):
+    def put_card(self, i, j, card):
+        if (card is None):
             return
-        screen.blit(pygame.image.load(self.field[i][j].path), (self.i_offset + self.i_factor * i, self.j_offset + self.j_factor * j))
+        self.screen.blit(pygame.image.load(card), (self.i_offset + self.i_factor * i, self.j_offset + self.j_factor * j))
         pygame.display.flip() #self.field[i][j].path => path = nom de la carte, ex : images/object_cards ,images/PathCards...
 	
-    def player_hand(self, player):
+    def player_hand(self, hand):
         coords = [(687, 53), (781, 53), (875, 53), (687, 109), (781, 109), (875, 109)]
-        cards = player.hand # a revoir lmao
+        cards = hand # a revoir lmao
 
         for i in range(len(cards)):
-            screen.blit(pygame.image.load(cards[i]), coords[i])
+            self.screen.blit(pygame.image.load(cards[i]), coords[i])
         
         pygame.display.flip()
 
-    def display_name(self):
-        name = pygame.font.Font(None, 32).render("florent", True, pygame.Color("gold")) #affiche le texte scrheck est juste un teste, il faudra utiliser une méthode de la classe player
-        screen.blit(name, (684, 20))
+    def display_name(self, name):
+        name = pygame.font.Font(None, 32).render(name, True, pygame.Color("gold")) #affiche le texte scrheck est juste un teste, il faudra utiliser une méthode de la classe player
+        self.screen.blit(name, (684, 20))
         pygame.display.flip()
     
-    def pick_card(self, player): #on clique sur une carte = carte jouée
+    def pick_card(self, hand): #on clique sur une carte = carte jouée
         # Create a button that does something when clicked
         card1 = pygame.Rect(687, 53, 75, 49)
         card2 = pygame.Rect(781, 53, 75, 49)
-        card3 = pygame.Rect(875, 53, 75, 49)
+        card3 = pygame.Rect(875, 53, 75, 49) 
         card4 = pygame.Rect(687, 109, 75, 49)
         card5 = pygame.Rect(781, 109, 75, 49)
         card6 = pygame.Rect(875, 109, 75, 49)
@@ -102,43 +112,43 @@ class PlayerView:
                         # Toggle the active variable.
                         active = not active
                         # Do something
-                        active_card = player.hand[0]
+                        active_card = hand[0]
                         done = True 
                     elif card2.collidepoint(event.pos):
                         # Toggle the active variable.
                         active = not active
                         # Do something
-                        active_card = player.hand[1]
+                        active_card = hand[1]
                         done = True
                     elif card3.collidepoint(event.pos):
                         # Toggle the active variable.
                         active = not active
                         # Do something
-                        active_card = player.hand[2]
+                        active_card = hand[2]
                         done = True
                     elif card4.collidepoint(event.pos):
                         # Toggle the active variable.
                         active = not active
                         # Do something
-                        active_card = player.hand[3]
+                        active_card = hand[3]
                         done = True
                     elif card5.collidepoint(event.pos):
                         # Toggle the active variable.
                         active = not active
                         # Do something
-                        active_card = player.hand[4]
+                        active_card = hand[4]
                         done = True
                     elif card6.collidepoint(event.pos):
                         # Toggle the active variable.
                         active = not active
                         # Do something
-                        active_card = player.hand[5]
+                        active_card = hand[5]
                         done = True
                     else:
                         active = False
         return active_card
-        
-    def discard_button(self):
+       
+    def discard_button(self): 
         discard_but = pygame.Rect(768, 174, 75, 49)
         color_inactive = pygame.Color('lightskyblue3')
         color_active = pygame.Color('dodgerblue2')
@@ -163,27 +173,35 @@ class PlayerView:
                     color = color_active if active else color_inactive
 
             # Add a white backgournd to the text box
-            pygame.draw.rect(screen, (255, 255, 255), (discard_but.x, discard_but.y, discard_but.w, discard_but.h))
+            pygame.draw.rect(self.screen, (255, 255, 255), (discard_but.x, discard_but.y, discard_but.w, discard_but.h))
             # Blit the input_box rect.
-            pygame.draw.rect(screen, color, discard_but, 2)
+            pygame.draw.rect(self.screen, color, discard_but, 2)
             pygame.display.flip()
             
-    def play_card(self, card, player):
+    def play_card(self, card):
         discard_but = pygame.Rect(768, 174, 75, 49)
+        gold_pos = [(2,9), (4,9), (6, 9)] 
+        pos_start = [(4, 1)] 
         done = False
+        
         while not done:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     # If the user clicked on the input_box rect.
-                    x_coord = event.pos[0]//75
-                    y_coord = event.pos[1]//49
-                    if x_coord < 9 :
-                        if self.field[x_coord][y_coord] == None:
+                    x_coord, y_coord = pygame.mouse.get_pos()
+                    x_coord //= 75
+                    y_coord //= 49
+                    if (x_coord,y_coord) in gold_pos or (x_coord,y_coord) in pos_start:
+                        continue
+
+                    elif x_coord < 9 and y_coord < 11 :
+                        # Print the field[i][j] matrix, i as vertical axis and j as horizontal axis
+                        if self.field[x_coord][y_coord] is None:                            
                             self.field[x_coord][y_coord] = card
-                            self.put_card(x_coord,y_coord)
-                            player.hand.remove(card)
+                            self.put_card(x_coord,y_coord, card)
+                            #player.hand.remove(card)
                             done = True
 
                     if discard_but.collidepoint(event.pos):
@@ -205,32 +223,43 @@ class PlayerView:
                     exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
-                        screen.blit(pygame.image.load(img), (0, 0))
+                        self.screen.blit(pygame.image.load(img), (0, 0))
                         pygame.display.flip()
                         done = True
- 
 
         
-                
-        
+    def display_joueurs(self,name):
+         #affiche le nom des joueurs en bas à droite
+        couple = [(695, 244), (787, 244), (874, 244), (695, 335), (787, 335), (874, 335), (695, 426), (787, 426), (874, 426)]
+        for i in range(len(name)):
+            text = pygame.font.Font(None, 32).render(name[i], True, pygame.Color("gold"))
+            self.screen.blit(text, couple[i])     
+        pygame.display.flip()   
 
-pv = PlayerView()
-
-pygame.init()
-
-screen = pygame.display.set_mode((960, 540))
+""" self.screen = pygame.display.set_mode((960, 540))
 pygame.display.set_caption("Test")
-
-
+name_players = []
+name = []
+done = False
 pv.menu("images/accueil0.jpg")
-pv.input_box(378,354)
-pv.entree_button("images/coal.jpg")
-
-pv.display_name()
+while not done:
+    
+    if pv.input_box(378,354).isnumeric() == True and 2 < int(pv.input_box(378,354)) < 11:   
+        pv.entree_button("images/accueil_name.jpg")
+        for i in range(int(pv.input_box(378,354))):
+            name = pv.input_box(378,354)
+            pv.entree_button("images/accueil_name.jpg")
+            name_players +=name
+        print(name_players)  
+    else:
+        pv.entree_button("images/accueil_fail_number.jpg")
+        pv.input_box(378,354) """
+    
+#pv.display_name()
 #pv.pick_card()
 #pv.discard_button()
-while True:
-    continue
+#while True:
+    #continue
 """
 for i in range(9):
         for j in range(11):
