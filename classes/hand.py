@@ -67,7 +67,7 @@ class Hand(object):#0       1       2       3       4       5       6       7   
             sys.exit()
         if len(self.__cards)==self.__hand_size:
             return
-        card.face=1
+        card.face = 1
         self.__cards.append(card)
 
     def remove_card(self, card):

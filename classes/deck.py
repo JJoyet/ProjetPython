@@ -21,14 +21,13 @@ class Deck(object):
             actiontyp = np.random.choice(np.array([0,1,2,3,4]))
             if actiontyp == 0:
                 self.__cartes.append(Action_card(6))
-            else:
+            else :
                 self.__cartes.append(Action_card(1))
         self.__cartes.append(Action_card(2))
 
     def random_cartes(self):
         """Method that allows you to mix cards"""
         self.__cartes = random.sample(self.__cartes, len(self.__cartes))
-
 
 
     @property
