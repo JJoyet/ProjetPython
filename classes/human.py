@@ -160,7 +160,7 @@ class Human(Player):
             print("Error: Player needs a card to make a decision")
             sys.exit()
 
-        # Make sure the player chooses sens=0 or sens=1
+        # Make sure the player chooses sens = 0 or sens = 1
         state = False
         change = 0
         while (state == False and change == 0):

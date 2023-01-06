@@ -115,7 +115,6 @@ class Menu(object):
                 self.__count[0] += 1
             elif self.__roles[k] == 'C':
                 self.__count[1] += 1
-        print(self.__count)
 
     def winner(self, state, current_indice):
         """state = 1 : Saboteurs won the set

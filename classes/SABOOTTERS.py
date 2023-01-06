@@ -19,7 +19,6 @@ class SABOOTERS(object):
         self.__defausse = []
         self.__joueurs = []
         self.__plateau = Plateau()
-
     def __initpartie(self):
         """ Initialization of a game"""
 
@@ -56,7 +55,6 @@ class SABOOTERS(object):
             # Create the deck with the action and path cards
             else:
                 self.__pioche.append(carte)
-        print(len(self.__pioche))
         # Players draw their cards
         for i in range(self.__menu.number):
             for j in range(self.__joueurs[i].hand.hand_size):

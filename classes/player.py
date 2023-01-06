@@ -30,7 +30,7 @@ class Player(ABC):
 
     # Abstract method that allows a human or an AI to play during a round
     @abstractmethod
-    def tourjoueur(self, plateau, pioche, defausse, card): pass
+    def tourjoueur(self, plateau, pioche, defausse): pass
 
 
     @property
