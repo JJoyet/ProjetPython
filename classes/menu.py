@@ -145,26 +145,32 @@ class Menu(object):
                 if self.__roles[self.__current_indice] == 'C':
                     print("It is the remaining gold cards")
                     print(f"To {self.__players_name[self.__current_indice]} to choose the card he/she wishes")
-                    while state == False:  # Choice of gold card
-                        print(f"Please choose a value between 1 and {self.__number - card_pull}")
-                        self.__choice = input()
-                        if self.__choice.isdecimal() == True:
-                            self.__choice = np.abs(int(self.__choice))
-                            if 0 < self.__choice <= self.__number - card_pull:
-                                state = True
-                            else:
-                                print("Please choose another value")
-
-                    score_round[self.__current_indice] += self.__sharing_gold[
-                        self.__choice - 1]  # Storage of scores to calculate at the end of the round
-                    print(
-                        f"{self.__players_name[self.__current_indice]} choose {self.__sharing_gold[(self.__choice) - 1]}")
-                    del self.__sharing_gold[self.__choice - 1]  # Remove the gold card chooses
-                    self.__current_indice += 1
-                    card_pull += 1
-                    state = False
-                    if not self.__sharing_gold:
-                        self.__current_indice = 11
+                    for k in range(self.__number):
+                        if self.bot[k] == "Human":
+                            while state == False:  # Choice of gold card
+                                print("")
+                                print(self.__sharing_gold)
+                                print(f"Please choose a value between 1 and {self.__number - card_pull}")
+                                self.__choice = input()
+                                if self.__choice.isdecimal() == True:
+                                    self.__choice = np.abs(int(self.__choice))
+                                if 0 < self.__choice <= self.__number - card_pull:
+                                    state = True
+                                else:
+                                    print("Please choose another value")
+                            score_round[self.__current_indice] += self.__sharing_gold[self.__choice - 1]  # Storage of scores to calculate at the end of the game
+                            print(
+                                f"{self.__players_name[self.__current_indice]} choose {self.__sharing_gold[(self.__choice) - 1]}")
+                            del self.__sharing_gold[self.__choice - 1]  # Remove the gold card chooses
+                            self.__current_indice += 1
+                            card_pull += 1
+                            state = False
+                        elif self.__bot[k] == "AI":
+                            score_round[self.__current_indice] += np.max(self.__sharing_gold)
+                            self.__choice = self.__sharing_gold.remove(np.max(self.__sharing_gold))
+                            self.__current_indice += 1
+                        if not self.__sharing_gold:
+                            self.__current_indice = 11
                 elif self.__roles[self.__current_indice] == 'S':
                     self.__current_indice += 1
             print("Here are the values of the gold cards")

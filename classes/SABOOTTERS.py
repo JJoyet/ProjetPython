@@ -31,7 +31,6 @@ class SABOOTERS(object):
                 self.__players.append(Human(self.__menu.players_name[i], self.__menu.roles[i], self.__menu.number))
             elif self.__menu.bot[i] == "AI":
                 self.__players.append(IA_Digger(self.__menu.players_name[i], self.__menu.roles[i], self.__menu.number))
-            self.__players.append(Human(self.__menu.players_name[i], self.__menu.roles[i], self.__menu.number))
 
     def __initround(self):
         """Initialization of a round"""
