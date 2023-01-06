@@ -60,8 +60,8 @@ class Card(ABC):
              [[1,0,1,0,1],[1,1,0,1,0]], #6
              [[1,1,1,0,0],[1,0,0,1,1]], #7
              [[1,1,1,1,1],[1,1,1,1,1]], #8
-             [[1,1,1,1,1],[1,1,1,1,1]], #9
-             [[1,1,1,1,1],[1,1,1,1,1]],]#10
+             [[2,1,1,1,1],[2,1,1,1,1]], #9 The first value is 2 to indicate that it is a gold card or a stone card.
+             [[2,1,1,1,1],[2,1,1,1,1]],]#10 The first value is 2 to indicate that it is a gold card or a stone card.
 
     def __init__(self, typ):
         # Define a position by default

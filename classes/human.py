@@ -75,7 +75,7 @@ class Human(Player):
 
         return choice_action
 
-    def __change_action(self, board):
+    def __change_action(self):
         """Define another action if an action could not be performed """
         state = False
         while state == False:
@@ -87,11 +87,11 @@ class Human(Player):
                 if change == 1 or change == 0:
                     state = True
                 else:
-                    self.__print_game_state_player(board)
+                    #self.__print_game_state_player(board)
                     print("Please, don't do anything else and just play!")
 
             else:
-                self.__print_game_state_player(board)
+                #self.__print_game_state_player(board)
                 print("Please, don't do anything else and just play!")
 
         return change
@@ -129,15 +129,15 @@ class Human(Player):
                     else:
                         self.__print_game_state_player(board)
                         print("One of the tools is broken, this card cannot be used.")
-                        change = self.__change_action(board)
+                        change = self.__change_action()
                 else:
                     self.__print_game_state_player(board)
                     print("Please, do not steal a card from your neighbour!")
-                    change = self.__change_action(board)
+                    change = self.__change_action()
             else:
                 self.__print_game_state_player(board)
                 print("Please, do not steal a card from your neighbour!")
-                change = self.__change_action(board)
+                change = self.__change_action()
 
         if change == 0:
             # We get the card that the player has chosen
@@ -183,11 +183,11 @@ class Human(Player):
                     self.__print_game_state_player(board)
                     print("It's a card, there are only two possibilities...")
 
-                    change = self.__change_action(board)
+                    change = self.__change_action()
             else:
                 self.__print_game_state_player(board)
                 print("It's a card, there are only two possibilities...")
-                change = self.__change_action(board)
+                change = self.__change_action()
         choice_card.direction = direction
         return change
 
@@ -233,11 +233,28 @@ class Human(Player):
                                 board.pathmap[i + 15][j + 14][0] == 1 or board.pathmap[i + 15][j + 16][0] == 1):
                             state = True
                             pos = [i, j]
+                            #These conditions make it impossible to place a card next to the stone and gold cards from the beginning.
+                            if board.pathmap[i + 14][j + 15][0] == 2 or board.pathmap[i + 16][j + 15][0] == 2 or board.pathmap[i + 15][j + 14][0] == 2 or board.pathmap[i + 15][j + 16][0] == 2:
+                                if board.pathmap[i + 14][j + 15][0] == 1 or board.pathmap[i + 16][j + 15][0] == 1 or board.pathmap[i + 15][j + 14][0] == 1 or board.pathmap[i + 15][j + 16][0] == 1:
+                                    etat = True
+                                    pos = [i, j]
+                                else:
+                                    self.__print_game_state_player(board)
+                                    print(card)
+                                    print("The card does not fit with the other cards")
+                                    change = self.__change_action()
+                                    if change == 0:
+                                        self.__print_game_state_player(board)
+                                        print(card)
+                                        print("Where do you want to place your card ?")
+                            else:        
+                                etat = True
+                                pos = [i, j]
                         else:
                             self.__print_game_state_player(board)
                             print(card)
                             print("The card does not fit with the other cards")
-                            change = self.__change_action(board)
+                            change = self.__change_action()
                             if change == 0:
                                 self.__print_game_state_player(board)
                                 print(card)
@@ -283,13 +300,13 @@ class Human(Player):
                     state = True
                 else:
                     print("The value entered is not correct")
-                    change = self.__change_action(board)
+                    change = self.__change_action()
                     if change == 0:
                         # Erase the content of the console, we check if we are on Windows
                         os.system('cls' if os.name == 'nt' else 'clear')
                         # Players' tools are displayed
                         for player in players:
-                            print(f"{players.name}'s tools:")
+                            print(f"{player.name}'s tools:")
                             player.hand.print_tools()
 
             except ValueError:
@@ -393,7 +410,7 @@ class Human(Player):
                                 if state == False:
                                     self.__print_game_state_player(board)
                                     print("The position does not correspond to any card.")
-                                    change = self.__change_action(board)
+                                    change = self.__change_action()
                             except ValueError:
                                 self.__print_game_state_player(board)
                                 print("Please choose a position on the board")

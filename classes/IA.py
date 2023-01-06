@@ -10,7 +10,7 @@ from .path_card import Path_card
 import sys
 
 
-class IA_Digger(Player):
+class IA_Player(Player):
     """ Using this class the players (digger) can make their choices"""
 
     def __init__(self, name, role, nb_players):
@@ -24,19 +24,7 @@ class IA_Digger(Player):
         os.system('cls' if os.name == 'nt' else 'clear')  # Clears the content of the console, we check if we are on
         # window
 
-        # Displays which round we are on
-        print("+-----------+")
-        print("| ROUND : {0} |".format(board.nb_round))
-        print("+-----------+")
 
-        # Display the board: board.affiche()
-        print(board)
-        print("It is {0} turn, your role is: {1}".format(self.name, self.role))
-        # Displays the player's hand
-        print(self.hand)
-
-        # Displays the status of its tools
-        self.hand.print_tools()
     # Method to ask the player what action he wants to take
     def __choice_action(self, board):
 
@@ -44,27 +32,10 @@ class IA_Digger(Player):
             print("Error: The player needs the board to take a decision")
             sys.exit()
 
-
-
-        # The player chooses an action
-        print("What action do you want to take?")
-        print("1) Use a card")
-        print("2) Passing your turn and throw away a card")
-        choice_action = 0
-        nb_good_cards: int = 0
-        #for k in range(len(self.hand.cards)):
-        #    if self.hand.cards[k].typ == 0:
-        #        nb_good_cards += 1
-         #   elif self.hand.cards[k].typ == 1 and self.hand.cards[k].vectapparence[0] == 2:
-          #      nb_good_cards += 1
-        #if nb_good_cards >= 4:
-         #   choix_action = 1
-        #else :
-         #   choix_action = 2
         choice_action = np.random.randint(1,3)
         return choice_action
 
-    def __change_action(self, board):     # Fait
+    def __change_action(self):     # Fait
         """Define another action if an action could not be performed """
         change = np.random.randint(0, 2)  # Choice between 0 and 1
         return change
@@ -87,12 +58,7 @@ class IA_Digger(Player):
         state = False
         change = 0
         nb_card = 0
-        # for k in range(len(self.hand.cards)):
-           # if self.hand.cards[k].typ == 0:
-            #    if card.path[card.sens][k] == [1, 0, 1, 1, 0] or card.path[card.sens][k] == [1, 1, 1, 1, 0] or card.path[card.sens][k] == [1, 0, 1, 1, 1] or card.path[card.sens][k] == [1, 1, 1, 1, 1,]:
-            #        no_carte = k
-            #elif self.hand.cards[k].typ == 1 and self.hand.cards[k].vectapparence[0] == 2:
-        #        no_carte = k
+
         if len(self.hand.cards) == 1:
             nb_card = 1
         else:
@@ -143,7 +109,6 @@ class IA_Digger(Player):
         pos = []
         x = 0
         y = 0
-        self.__print_game_state_player(board)
         print(card)
         print("Where do you want to place your card ?")
 
@@ -170,21 +135,17 @@ class IA_Digger(Player):
                         state = True
                         pos = [i, j]
                     else:
-                        self.__print_game_state_player(board)
                         print(card)
                         print("The card does not fit with the other cards")
-                        change = self.__change_action(board)
+                        change = self.__change_action()
                         if change == 0:
-                            self.__print_game_state_player(board)
                             print(card)
                             print("Where do you want to place your card ?")
                 else:
-                    self.__print_game_state_player(board)
                     print(card)
                     print("A card is already positioned at the desired location, choose another position")
                     print("Where do you want to place your card ?")
             else:
-                self.__print_game_state_player(board)
                 print(card)
                 print("Please place the card on the board (-10<=i<=10) (-10<=j<=10)")
                 print("Where do you want to place your card ?")
@@ -213,7 +174,6 @@ class IA_Digger(Player):
         os.system('cls' if os.name == 'nt' else 'clear')
         # On affiche les outils des joueurs
         for player in players:
-            print(f"{player.name}'s tools:")
             player.hand.print_tools()
 
         # The player is asked on which player he wants to apply the card
@@ -287,9 +247,8 @@ class IA_Digger(Player):
                                 pos = [i, j]
                                 state = board.collapse(pos)
                                 if state == False:
-                                    self.__print_game_state_player(board)
                                     print("The position does not correspond to any card.")
-                                    change = self.__change_action(board)
+                                    change = self.__change_action()
                                     i = i -1
                                     if i == 0:   # Change column
                                         i = 10
