@@ -9,3 +9,4 @@ sur les actions, pour rentrer un caractère dans une inputbox, il faut cliquer d
 Ensuite, pour déplacer une carte lorsqu'on est dans le jeu, on clique uns seule fois sur les cartes du joueurs courant en haut  à gauche (carte cliqué, carte joué, pas 
 de retour en arrière) puis sur le terrain. Jouer une carte est actuellement la seule manière de finir un tour, une fois la carte posé sur le terrain, le tour switch
 instantanément.
+Le "jeu" se joue dans le main
