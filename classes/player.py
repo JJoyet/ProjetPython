@@ -3,8 +3,8 @@ import random
 from abc import ABC, abstractmethod
 import os
 from .hand import Hand
-from .card import Carte
-from .board import Plateau
+from .card import Card
+from .board import Board
 import sys
 
 
@@ -14,23 +14,24 @@ class Player(ABC):
         self.__name = name
         self.__role = role    # the role is of the class menu.character[i]
         self.__hand = Hand(nb_players)   # to display the hand: player.hand.display_hand()
-    def piocher_carte(self, pioche):
+
+    def pick_card(self, unplayed_deck):
         """Method that allows the player to draw a card"""
-        if len(pioche) <= 0:
+        if len(unplayed_deck) <= 0:
             print("Error: the deck is empty")
             sys.exit()
         
-        self.__hand.add_card(pioche[0])
-        pioche.remove(pioche[0])
+        self.__hand.add_card(unplayed_deck[0])
+        unplayed_deck.remove(unplayed_deck[0])
 
-    def defausse_carte(self, card, defausse):
+    def discard_card(self, card, played_deck):
         """Method to remove a card from the player"""
-        defausse.append(card)
+        played_deck.append(card)
         self.__hand.remove_card(card)
 
     # Abstract method that allows a human or an AI to play during a round
     @abstractmethod
-    def tourjoueur(self, plateau, pioche, defausse): pass
+    def player_turn(self, Board, unplayed_deck, played_deck): pass
 
 
     @property
@@ -54,20 +55,3 @@ class Player(ABC):
     def hand(self):
         return self.__hand
 
-    # @hand.setter
-    # def hand(self,hand):
-    #     self.__hand=hand
-
-
-
-
-"""
-• à 3 joueurs : 1 Saboteur et 3 Chercheurs
-• à 4 joueurs : 1 Saboteur et 4 Chercheurs
-• à 5 joueurs : 2 Saboteurs et 4 Chercheurs
-• à 6 joueurs : 2 Saboteurs et 5 Chercheurs
-• à 7 joueurs : 3 Saboteurs et 5 Chercheurs
-• à 8 joueurs : 3 Saboteurs et 6 Chercheurs
-• à 9 joueurs : 3 Saboteurs et 7 Chercheurs
-• à 10 joueurs : toutes les cartes Rôle (4 Saboteurs et 7 Chercheurs)
-"""

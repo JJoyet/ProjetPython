@@ -1,7 +1,7 @@
 import numpy as np
 import random
 import sys
-from .card import Carte
+from .card import Card
 
 
 
@@ -36,7 +36,7 @@ class Hand(object):#0       1       2       3       4       5       6       7   
             st += "\n"
         return st
 
-    def affiche_tools(self):
+    def print_tools(self):
         """Function that displays the player's tools"""
         print("")
         for x in range(0, 3):
@@ -62,7 +62,7 @@ class Hand(object):#0       1       2       3       4       5       6       7   
     
     def add_card(self, card):
         """Method for adding a map"""
-        if not isinstance(card, Carte):
+        if not isinstance(card, Card):
             print("Error: only cards can be added to a player's hand")
             sys.exit()
         if len(self.__cards)==self.__hand_size:
@@ -72,7 +72,7 @@ class Hand(object):#0       1       2       3       4       5       6       7   
 
     def remove_card(self, card):
         """Method to remove a card"""
-        if not isinstance(card, Carte):
+        if not isinstance(card, Card):
             print("Error: only cards can be removed from a player's hand")
             sys.exit()
         self.__cards.remove(card)

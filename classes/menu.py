@@ -51,8 +51,8 @@ class Menu(object):
             self.__aff_wel()
             print('Please enter the name of player', k + 1)
             print('')
-            joueur = input()
-            self.__players_name.append(joueur)
+            player = input()
+            self.__players_name.append(player)
             print('The name of the player is:', self.__players_name[k])
             print('Please press 0 if the player is an AI and press 1 if the player is an Human')
             state = False
@@ -69,7 +69,7 @@ class Menu(object):
                     print("Please select 0 (AI) or 1 (Human):")
                     state = False
 
-    def __cartes_roles(self):  # Saboteur or Digger
+    def __cards_roles(self):  # Saboteur or Digger
         """Role of each player"""
         personnage = []
         if self.__number == 3:
@@ -97,7 +97,7 @@ class Menu(object):
             personnage = ['S', 'S', 'S', 'S', 'C', 'C', 'C', 'C', 'C', 'C', 'C']
             self.__roles = random.sample(personnage, 10)
 
-    def __affichage_debut_fin(self):
+    def __display_start_end(self):
         """Show the total number of players"""
         total = []
         for k in range(self.__number - 1):
@@ -123,61 +123,54 @@ class Menu(object):
         Calculate golds (points) for each digger """
         self.__state = state
         state = False
-        score_manche = np.zeros(self.__number)
+        score_round = np.zeros(self.__number)
         card_pull = 0
         self.__current_indice = current_indice
         if self.__state == 1:  # Case where the saboteurs won == 1
-            print('Saboteurs won this game!')
+            print('Saboteurs won this round!')
             print('')
             for k in range(self.__number):
                 if (self.__count[0] == 1 and self.__roles[k] == 'S'):
-                    score_manche[k] = 4  # 1 Saboteur = 4 points
+                    score_round[k] = 4  # 1 Saboteur = 4 points
                 elif (self.__count[0] == 2 or self.__count[0] == 3):
                     if self.__roles[k] == 'S':  # 2 or 3 Saboteurs = 3 points
-                        score_manche[k] = 3
+                        score_round[k] = 3
         elif (self.__state == 2):  # Case where Diggers won == 2
-            print('Diggers won this game!')
+            print('Diggers won this round!')
             self.__sharing_gold = np.random.randint(1, 4, size=self.__number)  # Gold card worth between 1 and 3
             self.__sharing_gold = self.__sharing_gold.tolist()
             while len(self.__sharing_gold) != 0:  # Until when there are more pts to give away
                 if self.__current_indice == self.__number:
                     self.__current_indice = 0
                 if self.__roles[self.__current_indice] == 'C':
-                    # while (current_indice < self.count[1]):  # Addition des pts des mineurs quand il y a plus de cartes or que de mineurs
                     print("It is the remaining gold cards")
                     print(f"To {self.__players_name[self.__current_indice]} to choose the card he/she wishes")
-                    for k in range(self.__number):
-                        if self.bot[k] == "Human":
-                            while state == False:  # Choice of gold card
-                                print("")
-                                print(self.__sharing_gold)
-                                print(f"Please choose a value between 1 and {self.__number - card_pull}")
-                                self.__choice = input()
-                                if self.__choice.isdecimal() == True:
-                                     self.__choice = np.abs(int(self.__choice))
-                                    if 0 < self.__choice <= self.__number - card_pull:
-                                        state = True
-                                    else:
-                                        print("Please choose another value")
-                            score_manche[self.__current_indice] += self.__sharing_gold[ self.__choice - 1]  # Storage of scores to calculate at the end of the game
-                            print(
-                            f"{self.__players_name[self.__current_indice]} choose {self.__sharing_gold[(self.__choice) - 1]}")
-                            del self.__sharing_gold[self.__choice - 1]  # Remove the gold card chooses
-                            self.__current_indice += 1
-                            card_pull += 1
-                            state = False
-                        elif self.__bot[k] == "AI":
-                            score_manche[self.__current_indice] += max(self.__sharing_gold)
-                            self.__choice = self.__sharing_gold.remove(max(self.__sharing_gold))
-                            self.__current_indice += 1
-                        if not self.__sharing_gold:
-                            self.__current_indice = 11
+                    while state == False:  # Choice of gold card
+                        print(f"Please choose a value between 1 and {self.__number - card_pull}")
+                        self.__choice = input()
+                        if self.__choice.isdecimal() == True:
+                            self.__choice = np.abs(int(self.__choice))
+                            if 0 < self.__choice <= self.__number - card_pull:
+                                state = True
+                            else:
+                                print("Please choose another value")
+
+                    score_round[self.__current_indice] += self.__sharing_gold[
+                        self.__choice - 1]  # Storage of scores to calculate at the end of the round
+                    print(
+                        f"{self.__players_name[self.__current_indice]} choose {self.__sharing_gold[(self.__choice) - 1]}")
+                    del self.__sharing_gold[self.__choice - 1]  # Remove the gold card chooses
+                    self.__current_indice += 1
+                    card_pull += 1
+                    state = False
+                    if not self.__sharing_gold:
+                        self.__current_indice = 11
                 elif self.__roles[self.__current_indice] == 'S':
                     self.__current_indice += 1
             print("Here are the values of the gold cards")
             print(self.__sharing_gold)
-        print(f"The score of this game is {score_manche}")
-        self.__spm.append(score_manche)
+        print(f"The score of this round is {score_round}")
+        self.__spm.append(score_round)
 
     def start_game(self):
         """Used in SABOOTERS.py to get information before the start"""
@@ -186,24 +179,32 @@ class Menu(object):
         self.__aff_wel()
         self.__get_number()
         self.__players()
-        self.__cartes_roles()
-        self.__affichage_debut_fin()
+        self.__cards_roles()
+        self.__display_start_end()
 
-    def fin_de_manche(self, state, current_indice):
+    def end_round(self, state, current_indice):
         """Used in SABOOTTERS.py to get the score of each set"""
         self.count_winner()
         self.winner(state, current_indice)
 
-    def fin_de_partie(self):
+    def end_game(self):
         """Used in SABOOTTERS.py to get the final score"""
         for i in range(self.__number):
             score_for_one_player = self.__spm[0][i] + self.__spm[1][i] + self.__spm[2][i]
             self.__total_score.append(score_for_one_player)
-        print(f' Le score final est de {self.__total_score}')
+        print(f' The final score of this game is  {self.__total_score}')
+        print('')
+        max = np.max(self.__total_score)
+        for k in range(len(self.__total_score)):
+            if self.__total_score[k] == max:
+                k_max = k
+                print(f"The winner of this game is {self.__players_name[k_max]} with {max} points")
+        for k in range(len(self.__total_score)):
+            print(f"{self.__players_name[k]}'s score is {self.__total_score[k]} points")
 
     def change_role(self):
         """Assigning roles to players"""
-        self.__cartes_roles()
+        self.__cards_roles()
 
     @property
     def number(self):
@@ -233,7 +234,7 @@ class Menu(object):
 
     @property
     def game_start(self):
-        return self.__aff_wel(), self.__get_number(), self.__players(), self.__affichage_debut_fin()
+        return self.__aff_wel(), self.__get_number(), self.__players(), self.__display_start_end()
 
     @property
     def total_score(self):

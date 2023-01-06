@@ -2,8 +2,8 @@ import numpy as np
 import random
 import os
 from .hand import Hand
-from .card import Carte
-from .board import Plateau
+from .card import Card
+from .board import Board
 from .player import Player
 from .action_card import Action_card
 from .path_card import Path_card
