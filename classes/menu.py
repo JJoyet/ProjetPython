@@ -144,6 +144,7 @@ class Menu(object):
                     self.__current_indice = 0
                 if self.__roles[self.__current_indice] == 'C':
                     print("It is the remaining gold cards")
+                    print(self.__sharing_gold)
                     print(f"To {self.__players_name[self.__current_indice]} to choose the card he/she wishes")
                     for k in range(self.__number):
                         if self.bot[k] == "Human":
@@ -159,16 +160,17 @@ class Menu(object):
                                 else:
                                     print("Please choose another value")
                             score_round[self.__current_indice] += self.__sharing_gold[self.__choice - 1]  # Storage of scores to calculate at the end of the game
-                            print(
-                                f"{self.__players_name[self.__current_indice]} choose {self.__sharing_gold[(self.__choice) - 1]}")
+                            print(f"{self.__players_name[self.__current_indice]} choose {self.__sharing_gold[self.__choice - 1]}")
                             del self.__sharing_gold[self.__choice - 1]  # Remove the gold card chooses
                             self.__current_indice += 1
                             card_pull += 1
                             state = False
                         elif self.__bot[k] == "AI":
-                            score_round[self.__current_indice] += np.max(self.__sharing_gold)
-                            self.__choice = self.__sharing_gold.remove(np.max(self.__sharing_gold))
+                            score_round[self.__current_indice] += max(self.__sharing_gold)
+                            self.__choice = self.__sharing_gold.remove(max(self.__sharing_gold))
                             self.__current_indice += 1
+                            print(f"{self.__players_name[current_indice]} took his points")
+                            card_pull += 1
                         if not self.__sharing_gold:
                             self.__current_indice = 11
                 elif self.__roles[self.__current_indice] == 'S':
