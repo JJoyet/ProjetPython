@@ -133,11 +133,10 @@ class Human(Player):
                 else:
                     self.__print_game_state_player(board)
                     print("Please, do not steal a card from your neighbour!")
-                    change = self.__change_action(plateau)
+                    change = self.__change_action(board)
             else:
                 self.__print_game_state_player(board)
                 print("Please, do not steal a card from your neighbour!")
-                change = self.__change_action(plateau)
                 change = self.__change_action(board)
 
         if change == 0:
