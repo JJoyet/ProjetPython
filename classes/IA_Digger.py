@@ -16,81 +16,84 @@ class IA_Digger(Player):
     def __init__(self, name, role, nb_players):
         super().__init__(name, role, nb_players)
 
+    def __print_game_state_player(self, plateau):
+        if not isinstance(plateau, Plateau):
+            print("Error: The player needs the board to take a decision")
+            sys.exit()
+        # Display of the board and the hand of the player whose turn it is
+        os.system('cls' if os.name == 'nt' else 'clear')  # Clears the content of the console, we check if we are on
+        # window
+
+        # Displays which round we are on
+        print("+-----------+")
+        print("| ROUND : {0} |".format(plateau.no_manche))
+        print("+-----------+")
 
         # Display the board: plateau.affiche()
         print(plateau)
         print("It is {0} turn, your role is: {1}".format(self.name, self.role))
-
         # Displays the player's hand
         print(self.hand)
 
         # Displays the status of its tools
         self.hand.affiche_tools()
-
     # Method to ask the player what action he wants to take
-    def __choix_action(self, plateau):  # Pas fait
+    def __choix_action(self, plateau):  #  fait
 
         if not isinstance(plateau, Plateau):
             print("Error: The player needs the board to take a decision")
             sys.exit()
 
-        # Display of the board and the hand of the player whose turn it is
-        self.__print_game_state_player(plateau)
+
 
         # The player chooses an action
         print("What action do you want to take?")
         print("1) Use a card")
         print("2) Passing your turn and throw away a card")
-        choix_action = 1
+        choix_action = 0
+        for k in range(len(self.hand.cards)):
+            if self.hand.cards[k].typ == 0:
+                choix_action = 1
+            elif self.hand.cards[k].typ == 1 and self.hand.cards[k].vectapparence[0] == 2:
+                choix_action = 1
+            else:
+                choix_action = 2
 
         return choix_action
 
-    def __change_action(self, plateau):     # Pas fait
+    def __change_action(self, plateau):     # Fait
         """Define another action if an action could not be performed """
         change = np.random.randint(0, 2)  # Choice between 0 and 1
         return change
 
     # Method to ask the player which card he wants to play
-    def __choix_carte(self, plateau, choix_action): # Pas fait
+    def __choix_carte(self, plateau, choix_action, card):         # Pas fait
 
         # We make sure that a board has been set up
         if not isinstance(plateau, Plateau):
             print("Error: The player needs the board to take a decision")
             sys.exit()
 
+        if not isinstance(card, Carte):
+            print("Error: The player needs the board to make a decision")
+            sys.exit()
         # We make sure that the choice value given as input is correct
         if choix_action != 1 and choix_action != 2:
             print("Error: the action choice entered in parameter does not correspond to any possible action")
             sys.exit()
 
+        self.__print_game_state_player(plateau)
+
         # We make sure that the player chooses one of his cards
         state = False
         change = 0
-        while state == False and change == 0:
-            self.__print_game_state_player(plateau)
-            print("What card would you like to chose (1 to {0})?".format(len(self.hand.cards)))
-            no_carte = input()
-            if no_carte.isdecimal() == True:
-                no_carte = int(no_carte)
-                if (no_carte > 0 and no_carte <= len(self.hand.cards)):
-                    if choix_action == 2 or (
-                            choix_action == 1 and self.hand.tools[0] == 1 and self.hand.tools[1] == 1 and
-                            self.hand.tools[2] == 1) or isinstance(self.hand.cards[no_carte - 1], Action_card):
-                        state = True
-                        no_carte = no_carte - 1
-                    else:
-                        self.__print_game_state_player(plateau)
-                        print("One of the tools is broken, this card cannot be used.")
-                        change = self.__change_action(plateau)
-                else:
-                    self.__print_game_state_player(plateau)
-                    print("Please, do not steal a card from your neighbour!")
-                    change = self.__change_action(plateau)
-            else:
-                self.__print_game_state_player(plateau)
-                print("Please, do not steal a card from your neighbour!")
-                change = self.__change_action(plateau)
-
+        no_carte = 0
+        for k in range(len(self.hand.cards)):
+            if self.hand.cards[k].typ == 0:
+                if card.path[card.sens][k] == [1, 0, 1, 1, 0] or card.path[card.sens][k] == [1, 1, 1, 1, 0] or card.path[card.sens][k] == [1, 0, 1, 1, 1] or card.path[card.sens][k] == [1, 1, 1, 1, 1,]:
+                    no_carte = k
+            elif self.hand.cards[k].typ == 1 and self.hand.cards[k].vectapparence[0] == 2:
+                no_carte = k
         if change == 0:
             # We get the card that the player has chosen
             choix_carte = self.hand.cards[no_carte]
@@ -101,7 +104,7 @@ class IA_Digger(Player):
         # The value change allows the player to change the action
         return change, choix_carte
 
-    def choix_sens_carte(self, plateau, choix_carte):   # Pas fait
+    def choix_sens_carte(self, plateau, choix_carte):   #  fait
         """Method that allows the player to choose the direction of the card"""
 
         # Check the nature of the parameters
@@ -117,16 +120,8 @@ class IA_Digger(Player):
         state = False
         change = 0
         while (state == False and change == 0):
-            self.__print_game_state_player(plateau)
-            print("Which way do you want to orient the card (0 or 1)?")
-            choix_carte.sens = 0
-            print("0 for the direct direction")
-            print(choix_carte, end="\n\n")
-            choix_carte.sens = 1
-            print("")
-            print("1 for the indirect direction")
-            print(choix_carte)
             sens = np.randint(0, 2)
+            state = True
         choix_carte.sens = sens
         return change
 
@@ -152,12 +147,11 @@ class IA_Digger(Player):
         # that the card he places is compatible with the other cards
         state = False
         change = 0
+        i = 2
+        j = 10
+        case = 1
         while state == False and change == 0:
-            i = input("Choose the line where you want to put the card: ")
-            j = input("Choose the column where you want to put the card: ")
             try:
-                i = int(i)
-                j = int(j)
                 if (i >= -10 and j <= 10 and i >= -10 and j <= 10):
                     if plateau.pathmap[i + 15][j + 15][0] == 0:
                         if ((card.path[card.sens][1] == plateau.pathmap[i + 14][j + 15][4] or
@@ -191,6 +185,25 @@ class IA_Digger(Player):
                     print(card)
                     print("Please place the card on the board (-10<=i<=10) (-10<=j<=10)")
                     print("Where do you want to place your card ?")
+                j -= 1
+                if j == 0:
+                    if case == 1:
+                        j = 10
+                        i += 1  # A revoir si on change la taille du tableau
+                        if i == 11:
+                            i == 2
+                            case = 2
+                    elif case == 2:
+                        j = 10
+                        i -= 10
+                        if i == -1:
+                            i = 2
+                            case = 1
+
+
+
+
+
             except ValueError:
                 self.__print_game_state_player(plateau)
                 print(card)
@@ -237,7 +250,7 @@ class IA_Digger(Player):
 
             if choix_action == 1:
                 # The player is asked which card he wants to play
-                change, choix_carte = self.__choix_carte(plateau, choix_action)
+                change, choix_carte = self.__choix_carte(plateau, choix_action, card)
 
                 if change == 1:
                     pass
@@ -262,52 +275,40 @@ class IA_Digger(Player):
 
                     # The card is a secret plan
                     if choix_carte.typ == 2:
-                        print("Which card do you want to reveal? ")
-                        state = False
-                        while state == False:
-                            i = input("Choose the line where you want to put the card: ")
-                            j = input("Choose the column where you want to put the card: ")
-                            try:
-                                i = int(i)
-                                j = int(j)
-                                state = True
-                                pos = [i, j]
-                            except ValueError:
-                                self.__print_game_state_player(plateau)
-                                print("Please choose a position on the board")
-                                print("Which card do you want to reveal? ")
-
+                        choice = np.randint(1, 4)
+                        pos = self.set_pos_gold[choice]
                         if pos == plateau.pos_gold:
-                            print(
-                                "The ancient scroll tells you that there is more gold here than you could spend on a night of drinking at the tavern.")
-                            a = input("Press any button to continue.")
+                            a = 1
 
                         else:
-                            print(
-                                "The old scroll tells you that there is absolutely nothing at this location and that it really sucks.")
-                            a = input("Press any button to continue.")
+                            a = 1
 
                     if choix_carte.typ == 6:  # The map is a crumbling map
                         state = False
                         while (state == False and change == 0):
                             self.__print_game_state_player(plateau)
                             print("Which path do you want to collapse?")
-                            i = input("Choose the line where you want to put the card: ")
-                            j = input("Choose the column where you want to put the card: ")
                             try:
-                                i = int(i)
-                                j = int(j)
+                                i = 10
+                                j = 10
                                 pos = [i, j]
                                 state = plateau.collapse(pos)
                                 if state == False:
                                     self.__print_game_state_player(plateau)
                                     print("The position does not correspond to any card.")
                                     change = self.__change_action(plateau)
+                                    i = i -1
+                                    if i == 0:   # Change column
+                                        i = 10
+                                        j -= 1
+                                    else:
+                                        i = i - 1
+
                             except ValueError:
                                 self.__print_game_state_player(plateau)
                                 print("Please choose a position on the board")
             elif choix_action == 2:  # The player is asked which card he wants to discard
-                change, choix_carte = self.__choix_carte(plateau, choix_action)
+                change, choix_carte = self.__choix_carte(plateau, choix_action, card)
                 if change == 0:
                     # The card is placed in the discard pile
                     defausse.append(choix_carte)

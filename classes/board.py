@@ -52,7 +52,7 @@ class Plateau(object):
             print("Error: The position of the card goes beyond the maximum size of the tray")
             sys.exit()
 
-        # Check if there is already a map positioned at the desired location
+        # Check if there is already a card positioned at the desired location
         if self.__pathmap[pos[0] + 15][pos[1] + 15][0] == 1:
             print("Error: a card is already positioned at the desired location")
             sys.exit()

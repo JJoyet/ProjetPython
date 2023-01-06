@@ -8,7 +8,7 @@ from .hand import Hand
 from .card import Carte
 from .board import Plateau
 from .human import Human
-
+from .IA_Digger import IA_Digger
 
 class SABOOTERS(object):
     """Class containing the whole game"""
@@ -25,7 +25,11 @@ class SABOOTERS(object):
 
         self.__menu.start_game()
         for i in range(0, self.__menu.number):
-            self.__joueurs.append(Human(self.__menu.players_name[i], self.__menu.roles[i], self.__menu.number))
+            if self.__menu.bot[i] == "Human":
+                self.__joueurs.append(Human(self.__menu.players_name[i], self.__menu.roles[i], self.__menu.number))
+            elif self.__menu.bot[i] == "AI":
+                self.__joueurs.append(IA_Digger(self.__menu.players_name[i], self.__menu.roles[i], self.__menu.number))
+
 
     def __initmanche(self):
         """Initialization of a round"""
