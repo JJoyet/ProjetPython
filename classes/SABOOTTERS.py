@@ -121,9 +121,10 @@ class SABOOTERS(object):
         k = 0
         while state == False:
             name = input()
-            if name == str(self.__menu.players_name[k]):
-                player_turn = k
-                state = True
+            for i in range(len(self.__menu.players_name)):
+                if name == str(self.__menu.players_name[i]):
+                    player_turn = k
+                    state = True
             else:
                 print('Please write a correct name')
         self.__plateau.no_manche = 1
