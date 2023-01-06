@@ -7,4 +7,4 @@ from .board import Board
 from .human import Human
 from .action_card import Action_card
 from .path_card import Path_card
-from .IA import IA_Digger
+from .IA import IA_Player

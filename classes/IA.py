@@ -18,7 +18,6 @@ class IA_Player(Player):
 
     def __print_game_state_player(self, board):
         if not isinstance(board, Board):
-            print("Error: The player needs the board to take a decision")
             sys.exit()
         # Display of the board and the hand of the player whose turn it is
         os.system('cls' if os.name == 'nt' else 'clear')  # Clears the content of the console, we check if we are on
@@ -49,7 +48,6 @@ class IA_Player(Player):
 
         # We make sure that the choice value given as input is correct
         if choice_action != 1 and choice_action != 2:
-            print("Error: the action choice entered in parameter does not correspond to any possible action")
             sys.exit()
 
         self.__print_game_state_player(board)
@@ -109,8 +107,7 @@ class IA_Player(Player):
         pos = []
         x = 0
         y = 0
-        print(card)
-        print("Where do you want to place your card ?")
+
 
         # We make sure that the player places the card on the board, that he does not overlap the cards and
         # that the card he places is compatible with the other cards
@@ -135,25 +132,13 @@ class IA_Player(Player):
                         state = True
                         pos = [i, j]
                     else:
-                        print(card)
-                        print("The card does not fit with the other cards")
                         change = self.__change_action()
-                        if change == 0:
-                            print(card)
-                            print("Where do you want to place your card ?")
-                else:
-                    print(card)
-                    print("A card is already positioned at the desired location, choose another position")
-                    print("Where do you want to place your card ?")
-            else:
-                print(card)
-                print("Please place the card on the board (-10<=i<=10) (-10<=j<=10)")
-                print("Where do you want to place your card ?")
+
             j -= 1
             if j == 0:
                 if case == 1:
                     j = 10
-                    i += 1  # A revoir si on change la taille du tableau
+                    i += 1
                     if i == 11:
                         i == 2
                         case = 2
@@ -168,13 +153,11 @@ class IA_Player(Player):
         return change, pos
 
     # Method to use an action_tools card
-    def __use_tools_card(self, players, choice_card):   # Fait
+    def __use_tools_card(self, players, choice_card):
         """Allow a player to use a tool card"""
         # Erase the content of the console, we check if we are on Windows
         os.system('cls' if os.name == 'nt' else 'clear')
-        # On affiche les outils des joueurs
-        for player in players:
-            player.hand.print_tools()
+
 
         # The player is asked on which player he wants to apply the card
         change = 0
@@ -229,7 +212,7 @@ class IA_Player(Player):
                     # The card is a secret plan
                     if choice_card.typ == 2:
                         choice = np.random.randint(0, 3)
-                        pos = [2,2]
+                        pos = [2,5]
                         if pos == board.pos_gold:
                             a = 1
 
@@ -240,14 +223,12 @@ class IA_Player(Player):
                         state = False
                         while (state == False and change == 0):
                             self.__print_game_state_player(board)
-                            print("Which path do you want to collapse?")
                             try:
                                 i = 10
                                 j = 10
                                 pos = [i, j]
                                 state = board.collapse(pos)
                                 if state == False:
-                                    print("The position does not correspond to any card.")
                                     change = self.__change_action()
                                     i = i -1
                                     if i == 0:   # Change column
@@ -258,7 +239,6 @@ class IA_Player(Player):
 
                             except ValueError:
                                 self.__print_game_state_player(board)
-                                print("Please choose a position on the board")
             elif choice_action == 2:  # The player is asked which card he wants to discard
                 change, choice_card = self.__choice_card(board, choice_action)
                 if change == 0:
