@@ -51,14 +51,17 @@ class IA_Digger(Player):
         print("1) Use a card")
         print("2) Passing your turn and throw away a card")
         choix_action = 0
-        for k in range(len(self.hand.cards)):
-            if self.hand.cards[k].typ == 0:
-                choix_action = 1
-            elif self.hand.cards[k].typ == 1 and self.hand.cards[k].vectapparence[0] == 2:
-                choix_action = 1
-            else:
-                choix_action = 2
-
+        nb_good_cards: int = 0
+        #for k in range(len(self.hand.cards)):
+        #    if self.hand.cards[k].typ == 0:
+        #        nb_good_cards += 1
+         #   elif self.hand.cards[k].typ == 1 and self.hand.cards[k].vectapparence[0] == 2:
+          #      nb_good_cards += 1
+        #if nb_good_cards >= 4:
+         #   choix_action = 1
+        #else :
+         #   choix_action = 2
+        choix_action = np.random.randint(1,3)
         return choix_action
 
     def __change_action(self, plateau):     # Fait
@@ -90,11 +93,14 @@ class IA_Digger(Player):
             #        no_carte = k
             #elif self.hand.cards[k].typ == 1 and self.hand.cards[k].vectapparence[0] == 2:
         #        no_carte = k
-        no_carte = np.random.randint(1,len(self.hand.cards))
+        if len(self.hand.cards) == 1:
+            no_carte = 1
+        else:
+            no_carte = np.random.randint(1, len(self.hand.cards))
 
         if change == 0:
             # We get the card that the player has chosen
-            choix_carte = self.hand.cards[no_carte]
+            choix_carte = self.hand.cards[no_carte -1]
         else:
             # We create a card that will not be used
             choix_carte = Action_card(1)
@@ -262,8 +268,8 @@ class IA_Digger(Player):
 
                     # The card is a secret plan
                     if choix_carte.typ == 2:
-                        choice = np.random.randint(1, 4)
-                        pos = self.set_pos_gold[choice]
+                        choice = np.random.randint(0, 3)
+                        pos = [2,2]
                         if pos == plateau.pos_gold:
                             a = 1
 
