@@ -10,8 +10,10 @@ from .board import Plateau
 from .human import Human
 from .IA_Digger import IA_Digger
 
+
 class SABOOTERS(object):
     """Class containing the whole game"""
+
     def __init__(self):
         self.__menu = Menu()
         self.__deck = Deck()
@@ -19,6 +21,7 @@ class SABOOTERS(object):
         self.__defausse = []
         self.__joueurs = []
         self.__plateau = Plateau()
+
     def __initpartie(self):
         """ Initialization of a game"""
 
@@ -29,7 +32,6 @@ class SABOOTERS(object):
             elif self.__menu.bot[i] == "AI":
                 self.__joueurs.append(IA_Digger(self.__menu.players_name[i], self.__menu.roles[i], self.__menu.number))
 
-
     def __initmanche(self):
         """Initialization of a round"""
         self.__menu.change_role()
@@ -38,9 +40,9 @@ class SABOOTERS(object):
             joueur.role = self.__menu.roles[i]
             i += 1
 
-        self.__deck.random_cartes()     # Shuffle the cards
+        self.__deck.random_cartes()  # Shuffle the cards
 
-        set_pos_gold = random.sample([[0, 2], [2, 2], [4, 2]], 3)   # Define the positions of the "END" cards
+        set_pos_gold = random.sample([[0, 2], [2, 2], [4, 2]], 3)  # Define the positions of the "END" cards
 
         # Card distribution
         k = 0
@@ -60,12 +62,12 @@ class SABOOTERS(object):
             for j in range(self.__joueurs[i].hand.hand_size):
                 self.__joueurs[i].piocher_carte(self.__pioche)
 
-    def __manche(self):
+    def __manche(self,player_turn):
         """How a round unfolds"""
 
         # Initialization of a game
         self.__initmanche()
-
+        self.player_turn = player_turn
         # Variable to determine if players have any cards left in their hand
         nb_card_player = 0
 
@@ -81,10 +83,14 @@ class SABOOTERS(object):
             nb_card_player = 0
             # Variable to know who to play
             current_indice = 0
-            for joueur in self.__joueurs:
-                joueur.tourjoueur(self.__plateau, self.__pioche, self.__defausse, self.__joueurs)
-                nb_card_player = nb_card_player + len(joueur.hand.cards)
+            for k in range(len(self.__joueurs)):
+                self.__joueurs[self.player_turn].tourjoueur(self.__plateau, self.__pioche, self.__defausse, self.__joueurs)
+                nb_card_player = nb_card_player + len(self.__joueurs[self.player_turn].hand.cards)
                 gold_found = self.__plateau.gold_found
+                self.player_turn += 1
+                # Re-loop to allow every player to play
+                if self.player_turn > len(self.__joueurs)-1:
+                    self.player_turn = 0
                 # If gold has been found it is the end of the round, the diggers win
                 if gold_found == 1:
                     state = 2
@@ -105,16 +111,29 @@ class SABOOTERS(object):
         # Remove the cards from the board
         self.__plateau.reset_plateau()
 
-    # How a game is played
     def start_game(self):
         """How a game is played"""
         # Initialization of the game
         self.__initpartie()
         # The game is played in three rounds
-        for i in range(3):
+        print("Write the name of the youngest person")
+        state = False
+        k = 0
+        while state == False:
+            name = input()
+            if name == str(self.__menu.players_name[k]):
+                player_turn = k
+                state = True
+            else:
+                print('Please write a correct name')
+        self.__plateau.no_manche = 1
+        # A round is going on
+        self.__manche(player_turn)
+
+        for i in range(2):
             # We display on the board which round we are at
             self.__plateau.no_manche = i + 1
             # A round is going on
-            self.__manche()
+            self.__manche(player_turn)
+            player_turn += 1
         self.__menu.fin_de_partie()
-
